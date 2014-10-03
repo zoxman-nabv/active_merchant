@@ -285,6 +285,23 @@ class StripeTest < Test::Unit::TestCase
     assert_nil post[:card][:name]
   end
 
+  def test_add_creditcard_with_eci_data
+    post = {}
+    @credit_card.stubs(:track_data).returns("Tracking data")
+    @credit_card.stubs(:eci_data).returns("ECI data")
+    @credit_card.stubs(:number).returns(4242424242424242)
+    @gateway.send(:add_creditcard, post, @credit_card, {})
+    assert_equal @credit_card.track_data, post[:card][:swipe_data]
+    assert_equal @credit_card.eci_data, post[:card][:eci_data]
+    assert_equal @credit_card.number, post[:card][:number]
+    
+    assert_nil post[:card][:exp_year]
+    assert_nil post[:card][:exp_month]
+    assert_nil post[:card][:cvc]
+    assert_nil post[:card][:name]
+  end
+
+
   def test_add_creditcard_with_token
     post = {}
     credit_card_token = "card_2iD4AezYnNNzkW"
