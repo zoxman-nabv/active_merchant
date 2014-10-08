@@ -8,7 +8,7 @@ gemfile:
   - Gemfile_rails40
 
 install: "bundle install"
-script: "bundle exec rake test:units"
+script: "bundle exec rake test:units && bundle exec rake test:remote"
 
 notifications:
   email:
