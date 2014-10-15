@@ -318,7 +318,8 @@ module ActiveMerchant #:nodoc:
           :test => response.has_key?("livemode") ? !response["livemode"] : false,
           :authorization => success ? response["id"] : response["error"]["charge"],
           :avs_result => { :code => avs_code },
-          :cvv_result => cvc_code
+          :cvv_result => cvc_code,
+          :error_code => success ? nil : response["error"]["code"]
         )
       end
 
