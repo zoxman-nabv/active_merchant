@@ -62,6 +62,21 @@ module ActiveMerchant #:nodoc:
       CREDIT_DEPRECATION_MESSAGE = "Support for using credit to refund existing transactions is deprecated and will be removed from a future release of ActiveMerchant. Please use the refund method instead."
       RECURRING_DEPRECATION_MESSAGE = "Recurring functionality in ActiveMerchant is deprecated and will be removed in a future version. Please contact the ActiveMerchant maintainers if you have an interest in taking ownership of a separate gem that continues support for it."
 
+      ERROR_CODES = {
+        :incorrect_number => 'INCORRECT_NUMBER',
+        :invalid_number => 'INVALID_NUMBER',
+        :invalid_expiry_date => 'INVALID_EXPIRY_DATE',
+        :invalid_cvc => 'INVALID_CVC',
+        :expired_card => 'EXPIRED_CARD',
+        :incorrect_cvc => 'INCORRECT_CVC',
+        :incorrect_zip => 'INCORRECT_ZIP',
+        :incorrect_address => 'INCORRECT_ADDRESS',
+        :card_declined => 'CARD_DECLINED',
+        :processing_error => 'PROCESSING_ERROR',
+        :call_issuer => 'CALL_ISSUER',
+        :pickup_card => 'PICK_UP_CARD'
+      }
+
       cattr_reader :implementations
       @@implementations = []
 
@@ -93,6 +108,8 @@ module ActiveMerchant #:nodoc:
       class_attribute :test_url, :live_url
 
       class_attribute :abstract_class
+
+      class_attribute :error_code_mapping
 
       self.abstract_class = false
 
@@ -149,6 +166,11 @@ module ActiveMerchant #:nodoc:
       # Are we running in test mode?
       def test?
         (@options.has_key?(:test) ? @options[:test] : Base.test?)
+      end
+
+      def standardize_error_code(error_code)
+        standard_error = self.error_code_mapping[error_code]
+        ERROR_CODES[standard_error]
       end
 
       protected # :nodoc: all

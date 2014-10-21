@@ -94,4 +94,15 @@ class GatewayTest < Test::Unit::TestCase
     assert Gateway.non_fractional_currency?('JPY')
     refute Gateway.non_fractional_currency?('CAD')
   end
+
+  def test_standardize_error_code
+    @gateway.error_code_mapping = {
+      'error-code-1' => :incorrect_number,
+      'error-code-2' => :incorrect_number,
+      'error-code-3' => :processing_error,
+    }
+    assert_equal @gateway.standardize_error_code('error-code-1'), Gateway::ERROR_CODES[:incorrect_number]
+    assert_equal @gateway.standardize_error_code('error-code-2'), Gateway::ERROR_CODES[:incorrect_number]
+    assert_equal @gateway.standardize_error_code('error-code-3'), Gateway::ERROR_CODES[:processing_error]
+  end
 end
