@@ -10,6 +10,25 @@ module ActiveMerchant #:nodoc:
       self.homepage_url         = 'http://www.usaepay.com/'
       self.display_name         = 'USA ePay'
 
+      self.error_code_mapping = {
+        '00011' => :incorrect_number,
+        '00012' => :incorrect_number,
+        '00013' => :incorrect_number,
+        '00014' => :invalid_number,
+        '00015' => :invalid_expiry_date,
+        '00016' => :invalid_expiry_date,
+        '00017' => :expired_card,
+        '10116' => :incorrect_cvc,
+        '10107' => :incorrect_zip,
+        '10109' => :incorrect_address,
+        '10110' => :incorrect_address,
+        '10111' => :incorrect_address,
+        '10127' => :card_declined,
+        '10128' => :processing_error,
+        '10132' => :processing_error,
+        '00043' => :call_issuer
+      }
+
       TRANSACTIONS = {
         :authorization  => 'cc:authonly',
         :purchase       => 'cc:sale',
@@ -199,12 +218,14 @@ module ActiveMerchant #:nodoc:
       def commit(action, parameters)
         url = (test? ? self.test_url : self.live_url)
         response = parse(ssl_post(url, post_data(action, parameters)))
+        success = response[:status] == 'Approved'
 
-        Response.new(response[:status] == 'Approved', message_from(response), response,
+        Response.new(success, message_from(response), response,
           :test           => test?,
           :authorization  => response[:ref_num],
           :cvv_result     => response[:cvv2_result_code],
-          :avs_result     => { :code => response[:avs_result_code] }
+          :avs_result     => { :code => response[:avs_result_code] },
+          :error_code     => success ? nil : standardize_error_code(response[:error_code])
         )
       end
 
