@@ -206,7 +206,6 @@ module ActiveMerchant #:nodoc:
       end
 
       def commit(action, parameters)
-
         raw = parse(ssl_post(self.live_url, build_request(action, parameters)))
 
         success = (raw['response'] == ResponseCodes::APPROVED)
