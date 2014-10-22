@@ -22,6 +22,12 @@ module ActiveMerchant #:nodoc:
       self.supported_cardtypes = [:visa, :master, :american_express, :discover, :diners_club, :jcb]
       self.default_currency = 'USD'
 
+      self.error_code_mapping = {
+        '100204' => :invalid_number,
+        '100205' => :invalid_expiry_date,
+        '000000' => :card_declined
+      }
+
       def initialize(options = {})
         requires!(options, :login, :password)
         @use_tokenization = (!options.has_key?(:tokenization) || options[:tokenization])
@@ -158,7 +164,11 @@ module ActiveMerchant #:nodoc:
 
         xml.tag! 'InvoiceNo', invoice_no
         xml.tag! 'RefNo', (ref_no || invoice_no)
-        xml.tag! 'OperatorID', options[:merchant] if options[:merchant]
+        if test?
+          xml.tag! 'OperatorID', "test"
+        else
+          xml.tag! 'OperatorID', options[:merchant] if options[:merchant]
+        end
         xml.tag! 'Memo', options[:description] if options[:description]
       end
 
@@ -285,7 +295,8 @@ module ActiveMerchant #:nodoc:
           :test => test?,
           :authorization => authorization_from(response),
           :avs_result => { :code => response[:avs_result] },
-          :cvv_result => response[:cvv_result])
+          :cvv_result => response[:cvv_result],
+          :error_code => success ? nil : standardize_error_code(response[:dsix_return_code]))
       end
 
       def message_from(response)
