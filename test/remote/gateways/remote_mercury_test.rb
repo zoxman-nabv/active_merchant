@@ -11,7 +11,7 @@ class RemoteMercuryTest < Test::Unit::TestCase
 
     @credit_card = credit_card("4003000123456781", :brand => "visa", :month => "12", :year => "15")
 
-    @track_data = "%B4003000123456781^LONGSEN/L. ^15121200000000000000**123******?*"
+    @track_data = "%B4003000123456781^LONGSEN/L. ^15121200000000000000**123******?"
 
     @options = {
       :order_id => "1",
@@ -73,6 +73,21 @@ class RemoteMercuryTest < Test::Unit::TestCase
     assert_equal "0.50", response.params["purchase"]
   end
 
+  def test_successful_purchase_with_track_data
+    @credit_card.track_data = @track_data
+    response = @gateway.purchase(50, @credit_card, @options)
+
+    assert_success response
+    assert_equal "0.50", response.params["purchase"]
+  end
+
+  def test_successful_purchase
+    response = @gateway.purchase(50, @credit_card, @options)
+
+    assert_success response
+    assert_equal "0.50", response.params["purchase"]
+  end
+
   def test_store
     response = @gateway.store(@credit_card, @options)
 
@@ -92,6 +107,7 @@ class RemoteMercuryTest < Test::Unit::TestCase
     response = @gateway.purchase(1100, @credit_card, @options)
     assert_failure response
     assert_equal "DECLINE", response.message
+    assert 'CARD_DECLINED', response.error_code
   end
 
   def test_avs_and_cvv_results

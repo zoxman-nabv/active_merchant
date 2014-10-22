@@ -163,6 +163,12 @@ class NetworkMerchantsTest < Test::Unit::TestCase
     assert_equal 'Invalid Username', response.message
   end
 
+  def test_error_code_mapping
+    @gateway.error_code_mapping.each_value do |error_code|
+      assert Gateway::ERROR_CODES.has_key?(error_code), "Gateway has an unknown error code '#{error_code}'"
+    end
+  end
+
   private
 
   # Place raw successful response from gateway here
