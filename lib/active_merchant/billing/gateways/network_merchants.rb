@@ -12,6 +12,18 @@ module ActiveMerchant #:nodoc:
       self.money_format = :dollars
       self.default_currency = 'USD'
 
+      self.error_code_mapping = {
+        '222' => :invalid_number,
+        '224' => :invalid_expiry_date,
+        '223' => :expired_card,
+        '225' => :incorrect_cvc,
+        '200' => :card_declined,
+        '420' => :processing_error,
+        '421' => :processing_error,
+        '240' => :call_issuer,
+        '250' => :pickup_card,
+      }
+
       def initialize(options = {})
         requires!(options, :login, :password)
         super
@@ -194,6 +206,7 @@ module ActiveMerchant #:nodoc:
       end
 
       def commit(action, parameters)
+
         raw = parse(ssl_post(self.live_url, build_request(action, parameters)))
 
         success = (raw['response'] == ResponseCodes::APPROVED)
@@ -204,7 +217,8 @@ module ActiveMerchant #:nodoc:
           :test => test?,
           :authorization => authorization,
           :avs_result => { :code => raw['avsresponse']},
-          :cvv_result => raw['cvvresponse']
+          :cvv_result => raw['cvvresponse'],
+          :error_code => success ? nil : standardize_error_code(raw['response_code'])
         )
       end
 
