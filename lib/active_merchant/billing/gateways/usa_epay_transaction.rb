@@ -218,14 +218,13 @@ module ActiveMerchant #:nodoc:
       def commit(action, parameters)
         url = (test? ? self.test_url : self.live_url)
         response = parse(ssl_post(url, post_data(action, parameters)))
-        success = response[:status] == 'Approved'
 
-        Response.new(success, message_from(response), response,
+        Response.new(response[:status] == 'Approved', message_from(response), response,
           :test           => test?,
           :authorization  => response[:ref_num],
           :cvv_result     => response[:cvv2_result_code],
           :avs_result     => { :code => response[:avs_result_code] },
-          :error_code     => success ? nil : STANDARD_ERROR_CODE_MAPPING[response[:error_code]]
+          :error_code     => STANDARD_ERROR_CODE_MAPPING[response[:error_code]]
         )
       end
 

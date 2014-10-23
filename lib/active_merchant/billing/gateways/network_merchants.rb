@@ -217,7 +217,7 @@ module ActiveMerchant #:nodoc:
           :authorization => authorization,
           :avs_result => { :code => raw['avsresponse']},
           :cvv_result => raw['cvvresponse'],
-          :error_code => success ? nil : STANDARD_ERROR_CODE_MAPPING[raw['response_code']]
+          :error_code => STANDARD_ERROR_CODE_MAPPING[raw['response_code']]
         )
       end
 

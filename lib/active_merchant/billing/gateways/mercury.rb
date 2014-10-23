@@ -296,7 +296,7 @@ module ActiveMerchant #:nodoc:
           :authorization => authorization_from(response),
           :avs_result => { :code => response[:avs_result] },
           :cvv_result => response[:cvv_result],
-          :error_code => success ? nil : STANDARD_ERROR_CODE_MAPPING[response[:dsix_return_code]])
+          :error_code => STANDARD_ERROR_CODE_MAPPING[response[:dsix_return_code]])
       end
 
       def message_from(response)
