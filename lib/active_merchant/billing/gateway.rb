@@ -62,19 +62,34 @@ module ActiveMerchant #:nodoc:
       CREDIT_DEPRECATION_MESSAGE = "Support for using credit to refund existing transactions is deprecated and will be removed from a future release of ActiveMerchant. Please use the refund method instead."
       RECURRING_DEPRECATION_MESSAGE = "Recurring functionality in ActiveMerchant is deprecated and will be removed in a future version. Please contact the ActiveMerchant maintainers if you have an interest in taking ownership of a separate gem that continues support for it."
 
+      # == Standardized Error Codes 
+      #
+      # :incorrect_number - Card number does not comply with ISO/IEC 7812 numbering standard
+      # :invalid_number - Card number was not matched by processor
+      # :invalid_expiry_date - Expiry date deos not match correct formatting
+      # :invalid_cvc - Security codes does not match correct format (3-4 digits)
+      # :expired_card - Card number is expired 
+      # :incorrect_cvc - Secerity code was not matched by the processor
+      # :incorrect_zip - Zip code is not in correct format
+      # :incorrect_address - Billing address info was not matched by the processor
+      # :card_declined - Card number declined by processor
+      # :processing_error - Processor error
+      # :call_issuer - Transaction requires voice authentication, call issuer
+      # :pickup_card - Issuer requests that you pickup the card from merchant
+
       ERROR_CODES = {
-        :incorrect_number => 'INCORRECT_NUMBER',
-        :invalid_number => 'INVALID_NUMBER',
-        :invalid_expiry_date => 'INVALID_EXPIRY_DATE',
-        :invalid_cvc => 'INVALID_CVC',
-        :expired_card => 'EXPIRED_CARD',
-        :incorrect_cvc => 'INCORRECT_CVC',
-        :incorrect_zip => 'INCORRECT_ZIP',
-        :incorrect_address => 'INCORRECT_ADDRESS',
-        :card_declined => 'CARD_DECLINED',
-        :processing_error => 'PROCESSING_ERROR',
-        :call_issuer => 'CALL_ISSUER',
-        :pickup_card => 'PICK_UP_CARD'
+        :incorrect_number => 'INCORRECT_NUMBER', 
+        :invalid_number => 'INVALID_NUMBER', 
+        :invalid_expiry_date => 'INVALID_EXPIRY_DATE', 
+        :invalid_cvc => 'INVALID_CVC', 
+        :expired_card => 'EXPIRED_CARD', 
+        :incorrect_cvc => 'INCORRECT_CVC', 
+        :incorrect_zip => 'INCORRECT_ZIP', 
+        :incorrect_address => 'INCORRECT_ADDRESS', 
+        :card_declined => 'CARD_DECLINED', 
+        :processing_error => 'PROCESSING_ERROR', 
+        :call_issuer => 'CALL_ISSUER', 
+        :pickup_card => 'PICK_UP_CARD' 
       }
 
       cattr_reader :implementations
