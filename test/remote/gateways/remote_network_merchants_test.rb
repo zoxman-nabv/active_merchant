@@ -32,7 +32,7 @@ class RemoteNetworkMerchantsTest < Test::Unit::TestCase
     assert response = @gateway.purchase(@decline_amount, @credit_card, @options)
     assert_failure response
     assert_equal 'DECLINE', response.message
-    assert 'CARD_DECLINED', response.error_code
+    assert_equal Gateway::STANDARD_ERROR_CODE[:card_declined], response.error_code
   end
 
   def test_purchase_and_store

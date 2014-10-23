@@ -194,12 +194,6 @@ class UsaEpayTransactionTest < Test::Unit::TestCase
     end
   end
 
-  def test_error_code_mapping
-    @gateway.error_code_mapping.each_value do |error_code|
-      assert Gateway::ERROR_CODES.has_key?(error_code), "Gateway has an unknown error code '#{error_code}'"
-    end
-  end
-
 private
 
   def assert_address(type, post)

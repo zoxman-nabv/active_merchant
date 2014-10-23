@@ -10,23 +10,23 @@ module ActiveMerchant #:nodoc:
       self.homepage_url         = 'http://www.usaepay.com/'
       self.display_name         = 'USA ePay'
 
-      self.error_code_mapping = {
-        '00011' => :incorrect_number,
-        '00012' => :incorrect_number,
-        '00013' => :incorrect_number,
-        '00014' => :invalid_number,
-        '00015' => :invalid_expiry_date,
-        '00016' => :invalid_expiry_date,
-        '00017' => :expired_card,
-        '10116' => :incorrect_cvc,
-        '10107' => :incorrect_zip,
-        '10109' => :incorrect_address,
-        '10110' => :incorrect_address,
-        '10111' => :incorrect_address,
-        '10127' => :card_declined,
-        '10128' => :processing_error,
-        '10132' => :processing_error,
-        '00043' => :call_issuer
+      STANDARD_ERROR_CODE_MAPPING = {
+        '00011' => STANDARD_ERROR_CODE[:incorrect_number],
+        '00012' => STANDARD_ERROR_CODE[:incorrect_number],
+        '00013' => STANDARD_ERROR_CODE[:incorrect_number],
+        '00014' => STANDARD_ERROR_CODE[:invalid_number],
+        '00015' => STANDARD_ERROR_CODE[:invalid_expiry_date],
+        '00016' => STANDARD_ERROR_CODE[:invalid_expiry_date],
+        '00017' => STANDARD_ERROR_CODE[:expired_card],
+        '10116' => STANDARD_ERROR_CODE[:incorrect_cvc],
+        '10107' => STANDARD_ERROR_CODE[:incorrect_zip],
+        '10109' => STANDARD_ERROR_CODE[:incorrect_address],
+        '10110' => STANDARD_ERROR_CODE[:incorrect_address],
+        '10111' => STANDARD_ERROR_CODE[:incorrect_address],
+        '10127' => STANDARD_ERROR_CODE[:card_declined],
+        '10128' => STANDARD_ERROR_CODE[:processing_error],
+        '10132' => STANDARD_ERROR_CODE[:processing_error],
+        '00043' => STANDARD_ERROR_CODE[:call_issuer]
       }
 
       TRANSACTIONS = {
@@ -225,7 +225,7 @@ module ActiveMerchant #:nodoc:
           :authorization  => response[:ref_num],
           :cvv_result     => response[:cvv2_result_code],
           :avs_result     => { :code => response[:avs_result_code] },
-          :error_code     => success ? nil : standardize_error_code(response[:error_code])
+          :error_code     => success ? nil : STANDARD_ERROR_CODE_MAPPING[response[:error_code]]
         )
       end
 

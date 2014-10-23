@@ -43,7 +43,7 @@ class RemoteStripeTest < Test::Unit::TestCase
     assert response = @gateway.purchase(@amount, @declined_card, @options)
     assert_failure response
     assert_match %r{Your card was declined}, response.message
-    assert_match "CARD_DECLINED", response.error_code
+    assert_match Gateway::STANDARD_ERROR_CODE[:card_declined], response.error_code
     assert_match CHARGE_ID_REGEX, response.authorization
   end
 

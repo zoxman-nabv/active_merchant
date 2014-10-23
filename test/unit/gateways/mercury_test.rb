@@ -71,12 +71,6 @@ class MercuryTest < Test::Unit::TestCase
     assert_success response
   end
 
-  def test_error_code_mapping
-    @gateway.error_code_mapping.each_value do |error_code|
-      assert Gateway::ERROR_CODES.has_key?(error_code), "Gateway has an unknown error code '#{error_code}'"
-    end
-  end
-
   private
 
   def successful_purchase_response

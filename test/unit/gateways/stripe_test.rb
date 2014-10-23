@@ -251,7 +251,7 @@ class StripeTest < Test::Unit::TestCase
 
     assert response = @gateway.purchase(@amount, @credit_card, @options)
     assert_failure response
-    assert_equal "CARD_DECLINED", response.error_code
+    assert_equal Gateway::STANDARD_ERROR_CODE[:card_declined], response.error_code
     assert !response.test? # unsuccessful request defaults to live
     assert_equal 'ch_test_charge', response.authorization
   end
@@ -512,12 +512,6 @@ class StripeTest < Test::Unit::TestCase
 
     assert_deprecation_warning do
       assert response = @gateway.unstore("CustomerID", "card_id", {})
-    end
-  end
-
-  def test_error_code_mapping
-    @gateway.error_code_mapping.each_value do |error_code|
-      assert Gateway::ERROR_CODES.has_key?(error_code), "Gateway has an unknown error code '#{error_code}'"
     end
   end
 

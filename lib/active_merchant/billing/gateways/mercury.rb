@@ -22,10 +22,10 @@ module ActiveMerchant #:nodoc:
       self.supported_cardtypes = [:visa, :master, :american_express, :discover, :diners_club, :jcb]
       self.default_currency = 'USD'
 
-      self.error_code_mapping = {
-        '100204' => :invalid_number,
-        '100205' => :invalid_expiry_date,
-        '000000' => :card_declined
+      STANDARD_ERROR_CODE_MAPPING = {
+        '100204' => STANDARD_ERROR_CODE[:invalid_number],
+        '100205' => STANDARD_ERROR_CODE[:invalid_expiry_date],
+        '000000' => STANDARD_ERROR_CODE[:card_declined]
       }
 
       def initialize(options = {})
@@ -296,7 +296,7 @@ module ActiveMerchant #:nodoc:
           :authorization => authorization_from(response),
           :avs_result => { :code => response[:avs_result] },
           :cvv_result => response[:cvv_result],
-          :error_code => success ? nil : standardize_error_code(response[:dsix_return_code]))
+          :error_code => success ? nil : STANDARD_ERROR_CODE_MAPPING[response[:dsix_return_code]])
       end
 
       def message_from(response)

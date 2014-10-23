@@ -12,16 +12,16 @@ module ActiveMerchant #:nodoc:
       self.money_format = :dollars
       self.default_currency = 'USD'
 
-      self.error_code_mapping = {
-        '222' => :invalid_number,
-        '224' => :invalid_expiry_date,
-        '223' => :expired_card,
-        '225' => :incorrect_cvc,
-        '200' => :card_declined,
-        '420' => :processing_error,
-        '421' => :processing_error,
-        '240' => :call_issuer,
-        '250' => :pickup_card,
+      STANDARD_ERROR_CODE_MAPPING = {
+        '222' => STANDARD_ERROR_CODE[:invalid_number],
+        '224' => STANDARD_ERROR_CODE[:invalid_expiry_date],
+        '223' => STANDARD_ERROR_CODE[:expired_card],
+        '225' => STANDARD_ERROR_CODE[:incorrect_cvc],
+        '200' => STANDARD_ERROR_CODE[:card_declined],
+        '420' => STANDARD_ERROR_CODE[:processing_error],
+        '421' => STANDARD_ERROR_CODE[:processing_error],
+        '240' => STANDARD_ERROR_CODE[:call_issuer],
+        '250' => STANDARD_ERROR_CODE[:pickup_card],
       }
 
       def initialize(options = {})
@@ -217,7 +217,7 @@ module ActiveMerchant #:nodoc:
           :authorization => authorization,
           :avs_result => { :code => raw['avsresponse']},
           :cvv_result => raw['cvvresponse'],
-          :error_code => success ? nil : standardize_error_code(raw['response_code'])
+          :error_code => success ? nil : STANDARD_ERROR_CODE_MAPPING[raw['response_code']]
         )
       end
 
