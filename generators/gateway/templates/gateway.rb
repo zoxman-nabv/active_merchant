@@ -11,6 +11,19 @@ module ActiveMerchant #:nodoc:
       self.homepage_url = 'http://www.example.net/'
       self.display_name = 'New Gateway'
 
+      STANDARD_ERROR_CODE_MAPPING = {
+        'xxx' => STANDARD_ERROR_CODE[:incorrect_number],
+        'xxx' => STANDARD_ERROR_CODE[:invalid_number],
+        'xxx' => STANDARD_ERROR_CODE[:invalid_expiry_date],
+        'xxx' => STANDARD_ERROR_CODE[:invalid_expiry_date],
+        'xxx' => STANDARD_ERROR_CODE[:invalid_cvc],
+        'xxx' => STANDARD_ERROR_CODE[:expired_card],
+        'xxx' => STANDARD_ERROR_CODE[:incorrect_cvc],
+        'xxx' => STANDARD_ERROR_CODE[:incorrect_zip],
+        'xxx' => STANDARD_ERROR_CODE[:card_declined],
+        'xxx' => STANDARD_ERROR_CODE[:processing_error]
+      }
+
       def initialize(options={})
         requires!(options, :some_credential, :another_credential)
         super
