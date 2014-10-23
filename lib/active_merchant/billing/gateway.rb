@@ -77,7 +77,7 @@ module ActiveMerchant #:nodoc:
       # :call_issuer - Transaction requires voice authentication, call issuer
       # :pickup_card - Issuer requests that you pickup the card from merchant
 
-      ERROR_CODES = {
+      STANDARD_ERROR_CODE = {
         :incorrect_number => 'INCORRECT_NUMBER', 
         :invalid_number => 'INVALID_NUMBER', 
         :invalid_expiry_date => 'INVALID_EXPIRY_DATE', 
@@ -123,8 +123,6 @@ module ActiveMerchant #:nodoc:
       class_attribute :test_url, :live_url
 
       class_attribute :abstract_class
-
-      class_attribute :error_code_mapping
 
       self.abstract_class = false
 
@@ -181,11 +179,6 @@ module ActiveMerchant #:nodoc:
       # Are we running in test mode?
       def test?
         (@options.has_key?(:test) ? @options[:test] : Base.test?)
-      end
-
-      def standardize_error_code(error_code)
-        standard_error = self.error_code_mapping[error_code]
-        ERROR_CODES[standard_error]
       end
 
       protected # :nodoc: all
