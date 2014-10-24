@@ -94,4 +94,33 @@ class RemoteUsaEpayTransactionTest < Test::Unit::TestCase
     assert_match "Card Declined (00)", response.message
   end
 
+  def test_incorrect_number_for_purchase
+    card = credit_card('abcd')
+    assert response = @gateway.purchase(@amount, card, @options.merge(:order_id => generate_unique_id))
+    assert_failure response
+    assert_match Gateway::STANDARD_ERROR_CODE[:incorrect_number], response.error_code
+  end
+
+  def test_invalid_number_for_purchase
+    card = credit_card('869938761450999') #USA epay doesn't support voyager cards
+    assert response = @gateway.purchase(@amount, card, @options.merge(:order_id => generate_unique_id))
+    assert_failure response
+    assert_match Gateway::STANDARD_ERROR_CODE[:invalid_number], response.error_code
+  end
+
+  def test_expired_card_for_purchase
+    card = credit_card('4242424242424242', :month => Time.now.month - 1, :year => Time.now.year - 2000)
+    assert response = @gateway.purchase(@amount, card, @options.merge(:order_id => generate_unique_id))
+    assert_failure response
+    assert_match Gateway::STANDARD_ERROR_CODE[:expired_card], response.error_code
+  end
+
+  def test_expired_card_for_purchase
+    card = credit_card('4242424242424242', :month => Time.now.month - 1, :year => Time.now.year - 2000)
+    assert response = @gateway.purchase(@amount, card, @options.merge(:order_id => generate_unique_id))
+    assert_failure response
+    assert_match Gateway::STANDARD_ERROR_CODE[:expired_card], response.error_code
+  end
+
+
 end
