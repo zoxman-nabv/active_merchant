@@ -78,18 +78,18 @@ module ActiveMerchant #:nodoc:
       # :pickup_card - Issuer requests that you pickup the card from merchant
 
       STANDARD_ERROR_CODE = {
-        :incorrect_number => 'INCORRECT_NUMBER', 
-        :invalid_number => 'INVALID_NUMBER', 
-        :invalid_expiry_date => 'INVALID_EXPIRY_DATE', 
-        :invalid_cvc => 'INVALID_CVC', 
-        :expired_card => 'EXPIRED_CARD', 
-        :incorrect_cvc => 'INCORRECT_CVC', 
-        :incorrect_zip => 'INCORRECT_ZIP', 
-        :incorrect_address => 'INCORRECT_ADDRESS', 
-        :card_declined => 'CARD_DECLINED', 
-        :processing_error => 'PROCESSING_ERROR', 
-        :call_issuer => 'CALL_ISSUER', 
-        :pickup_card => 'PICK_UP_CARD' 
+        :incorrect_number => 'incorrect_number', 
+        :invalid_number => 'invalid_number', 
+        :invalid_expiry_date => 'invalid_expiry_date', 
+        :invalid_cvc => 'invalid_cvc', 
+        :expired_card => 'expired_card', 
+        :incorrect_cvc => 'incorrect_cvc', 
+        :incorrect_zip => 'incorrect_zip', 
+        :incorrect_address => 'incorrect_address', 
+        :card_declined => 'card_declined', 
+        :processing_error => 'processing_error', 
+        :call_issuer => 'call_issuer', 
+        :pickup_card => 'pick_up_card' 
       }
 
       cattr_reader :implementations
