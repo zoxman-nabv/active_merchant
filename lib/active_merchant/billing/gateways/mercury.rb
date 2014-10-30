@@ -99,6 +99,7 @@ module ActiveMerchant #:nodoc:
             add_customer_data(xml, options)
             add_amount(xml, money, options)
             add_credit_card(xml, credit_card, action)
+            xml.tag! "LaneID", options[:terminal_id] if options[:terminal_id]
             add_address(xml, options) unless credit_card.track_data.present?
           end
         end
@@ -158,7 +159,11 @@ module ActiveMerchant #:nodoc:
 
         xml.tag! 'InvoiceNo', invoice_no
         xml.tag! 'RefNo', (ref_no || invoice_no)
-        xml.tag! 'OperatorID', options[:merchant] if options[:merchant]
+        if test?
+          xml.tag! "OperatorID", "Test"
+        else
+          xml.tag! 'OperatorID', options[:merchant] if options[:merchant]
+        end
         xml.tag! 'Memo', options[:description] if options[:description]
       end
 
@@ -277,7 +282,6 @@ module ActiveMerchant #:nodoc:
 
       def commit(action, request)
         response = parse(action, ssl_post(endpoint_url, build_soap_request(request), build_header))
-
         success = SUCCESS_CODES.include?(response[:cmd_status])
         message = success ? 'Success' : message_from(response)
 

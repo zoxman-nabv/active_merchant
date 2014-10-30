@@ -11,11 +11,12 @@ class RemoteMercuryCertificationTest < Test::Unit::TestCase
 
     @credit_card = credit_card("4003000123456781", :brand => "visa", :month => "12", :year => "15")
 
-    @credit_card_track_data = credit_card_track_data("4005550000000480")
+    @credit_card_with_track_data = credit_card_with_track_data("4005550000000480")
 
     @options = {
       :order_id => "1",
-      :description => "Shopify"
+      :description => "ActiveMerchant",
+      :terminal_id => "1"
     }
     @options_with_billing = @options.merge(
       :merchant => '999',
@@ -35,65 +36,65 @@ class RemoteMercuryCertificationTest < Test::Unit::TestCase
 
   def test_11
     @gateway = MercuryGateway.new(:login => "003503902913105", :password => "xyz")
-    response = @gateway.purchase(101, @credit_card_track_data, @options)
+    response = @gateway.purchase(101, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal "1.01", response.params["purchase"]
   end
   def test_12
     @gateway = MercuryGateway.new(:login => "118725340908147", :password => "xyz")
-    response = @gateway.purchase(102, @credit_card_track_data, @options)
+    response = @gateway.purchase(102, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal "1.02", response.params["purchase"]
   end
   def test_13
     @gateway = MercuryGateway.new(:login => "023358150511666", :password => "xyz")
-    response = @gateway.purchase(103, @credit_card_track_data, @options)
+    response = @gateway.purchase(103, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal "1.03", response.params["purchase"]
   end
 
   def test_21
-    @credit_card_track_data = credit_card_track_data("373953244361001")
-    response = @gateway.authorize(104, @credit_card_track_data, @options)
+    @cc_with_track = credit_card_with_track_data("373953244361001")
+    response = @gateway.authorize(104, @cc_with_track, @options)
     assert_success response
     assert_equal '1.04', response.params['authorize']
   end
 
   def test_22
-    @credit_card_track_data = credit_card_track_data("6011900212345677")
-    response = @gateway.authorize(105, @credit_card_track_data, @options)
+    @cc_with_track = credit_card_with_track_data("6011900212345677")
+    response = @gateway.authorize(105, @cc_with_track, @options)
     assert_success response
     assert_equal '1.05', response.params['authorize']
   end
 
   def test_23
-    @credit_card_track_data = credit_card_track_data("5439750001500248")
-    response = @gateway.purchase(106, @credit_card_track_data, @options)
+    @cc_with_track = credit_card_with_track_data("5439750001500248")
+    response = @gateway.purchase(106, @cc_with_track, @options)
     assert_success response
     assert_equal "1.06", response.params["purchase"]
   end
 
   def test_24
-    @credit_card_track_data = credit_card_track_data("4005550000000480")
-    response = @gateway.purchase(107, @credit_card_track_data, @options)
+    @cc_with_track = credit_card_with_track_data("4005550000000480")
+    response = @gateway.purchase(107, @cc_with_track, @options)
     assert_success response
     assert_equal "1.07", response.params["purchase"]
   end
 
   def test_31
-    response = @gateway.authorize(107, @credit_card_track_data, @options)
+    response = @gateway.authorize(107, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal '1.07', response.params['authorize']
   end
 
   def test_32
-    response = @gateway.authorize(107, @credit_card_track_data, @options)
+    response = @gateway.authorize(107, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal '1.07', response.params['authorize']
   end
 
   def test_33
-    response = @gateway.purchase(107, @credit_card_track_data, @options)
+    response = @gateway.purchase(107, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal "1.07", response.params["purchase"]
     assert_equal "AP*", response.params["text_response"]
@@ -149,7 +150,7 @@ class RemoteMercuryCertificationTest < Test::Unit::TestCase
   end
 
     def test_5152
-    response = @gateway.authorize(202, @credit_card_track_data, @options)
+    response = @gateway.authorize(202, @credit_card_with_track_data, @options)
     assert_success response
 
     void = @gateway.void(response.authorization, @options.merge(:try_reversal => true))
@@ -157,7 +158,7 @@ class RemoteMercuryCertificationTest < Test::Unit::TestCase
   end
 
   def test_successful_authorize_and_capture_with_track
-    response = @gateway.authorize(300, @credit_card_track_data, @options)
+    response = @gateway.authorize(300, @credit_card_with_track_data, @options)
     assert_success response
     assert_equal '3.00', response.params['authorize']
 
