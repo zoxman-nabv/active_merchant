@@ -451,6 +451,7 @@ module ActiveMerchant #:nodoc:
         add_expand_parameters(parameters, options) if parameters
         emv_receipt = StripeICCData.new(parameters[:card][:icc_data]).receipt_tlv_string if parameters[:card] && parameters[:card][:icc_data]
 
+        puts "Faking out request with params: #{parameters}"
         if (url == 'charges')
           response = JSON.parse successful_auth_response_for_b2
         else
